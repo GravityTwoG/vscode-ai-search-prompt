@@ -2,10 +2,16 @@
   "name": "ai-search-prompt",
   "displayName": "ai-search-prompt",
   "description": "AI-powered search prompt for VS Code",
+  "author": {
+    "name": "Marsel Abazbekov",
+    "email": "crytekov@gmail.com",
+    "url": "https://github.com/GravityTwoG"
+  },
+  "publisher": "MarselAbazbekov",
   "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gravitytwog/vscode-ai-search-prompt"
+    "url": "https://github.com/GravityTwoG/vscode-ai-search-prompt"
   },
   "engines": {
     "vscode": "^1.97.0"
@@ -18,6 +24,7 @@
   "contributes": {
     "activationEvents": [
       "onView:aiSearchPrompt",
+      "onCommand:ai-search-prompt.openPrompt",
       "onCommand:ai-search-prompt.submitPrompt",
       "onStartupFinished"
     ],
@@ -34,18 +41,13 @@
     "commands": [
       {
         "command": "ai-search-prompt.openPrompt",
-        "title": "Generate"
+        "title": "Generate",
+        "icon": {
+          "dark": "./assets/search-icon-dark.svg",
+          "light": "./assets/search-icon-light.svg"
+        }
       }
     ],
-    "views": {
-      "search": [
-        {
-          "id": "aiSearchPrompt",
-          "name": "AI Search Prompt",
-          "type": "webview"
-        }
-      ]
-    },
     "menus": {
       "view/title": [
         {
@@ -57,7 +59,7 @@
     },
     "keybindings": [
       {
-        "command": "ai-search-prompt.quickPrompt",
+        "command": "ai-search-prompt.openPrompt",
         "key": "ctrl+shift+a",
         "mac": "cmd+shift+a",
         "when": "searchViewletVisible"
@@ -92,6 +94,7 @@
     "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
     "package": "npm run check-types && npm run lint && node esbuild.js --production",
     "vsce-package": "vsce package",
+    "publish": "vsce publish",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",

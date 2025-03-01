@@ -50,7 +50,7 @@ export class SearchViewDecorator {
     const prompt = await vscode.window.showInputBox({
       prompt: 'Enter a natural language description for your search',
       placeHolder: 'Find functions that handle user authentication...',
-      ignoreFocusOut: true,
+      ignoreFocusOut: false,
     });
 
     if (prompt) {
