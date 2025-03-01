@@ -1,44 +1,39 @@
 import * as vscode from 'vscode';
-import { SearchPromptViewProvider } from './search-prompt-view';
+import { SearchViewDecorator } from './search-view-decorator';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-  // Use the console to output diagnostic information (console.log) and errors (console.error)
   console.log('AI Search Prompt extension is now active');
 
-  // Register the custom search prompt view provider
-  const searchPromptViewProvider = new SearchPromptViewProvider(
-    context.extensionUri
+  // Add a button in the title area of the search view
+  context.subscriptions.push(
+    vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 0)
   );
 
-  context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider(
-      SearchPromptViewProvider.viewType,
-      searchPromptViewProvider
-    )
-  );
+  // Create our search decorator
+  const searchDecorator = new SearchViewDecorator(context);
+  searchDecorator.activate();
 
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with registerCommand
-  // The commandId parameter must match the command field in package.json
+  context.subscriptions.push({
+    dispose: () => searchDecorator.dispose(),
+  });
+
+  // Register keyboard shortcut for quicker access
   context.subscriptions.push(
-    vscode.commands.registerCommand('ai-search-prompt.submitPrompt', () => {
-      vscode.window
-        .showInputBox({
-          prompt: 'Enter your search prompt',
-          placeHolder: 'Find functions that handle user authentication...',
-        })
-        .then((prompt) => {
-          if (prompt) {
-            // Forward to the view provider
-            vscode.commands.executeCommand('aiSearchPrompt.focus');
-            searchPromptViewProvider.processPrompt(prompt);
-          }
+    vscode.commands.registerCommand(
+      'ai-search-prompt.quickPrompt',
+      async () => {
+        const result = await vscode.window.showInputBox({
+          placeHolder: 'Describe what you want to search for...',
+          prompt: 'AI Search Prompt',
         });
-    })
+
+        if (result) {
+          // Forward to processing
+          vscode.commands.executeCommand('ai-search-prompt.openPrompt');
+        }
+      }
+    )
   );
 }
 
-// This method is called when your extension is deactivated
 export function deactivate() {}

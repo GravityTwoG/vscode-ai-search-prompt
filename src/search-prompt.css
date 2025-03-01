@@ -1,0 +1,21 @@
+.ai-search-prompt-container {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  margin-bottom: 8px;
+}
+
+.ai-search-prompt-input {
+  background-color: var(--vscode-input-background);
+  color: var(--vscode-input-foreground);
+  border: 1px solid var(--vscode-input-border);
+  padding: 5px;
+  border-radius: 2px;
+}
+
+.ai-search-prompt-label {
+  font-size: 11px;
+  margin-bottom: 3px;
+  color: var(--vscode-foreground);
+  opacity: 0.8;
+}

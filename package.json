@@ -3,6 +3,10 @@
   "displayName": "ai-search-prompt",
   "description": "AI-powered search prompt for VS Code",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gravitytwog/vscode-ai-search-prompt"
+  },
   "engines": {
     "vscode": "^1.97.0"
   },
@@ -12,22 +16,51 @@
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
+    "activationEvents": [
+      "onView:aiSearchPrompt",
+      "onCommand:ai-search-prompt.submitPrompt",
+      "onStartupFinished"
+    ],
     "viewsContainers": {
       "activitybar": []
     },
+    "viewsWelcome": [
+      {
+        "view": "workbench.view.search",
+        "contents": "Use AI to help with search\nGenerate Search Query",
+        "when": "searchViewletVisible"
+      }
+    ],
+    "commands": [
+      {
+        "command": "ai-search-prompt.openPrompt",
+        "title": "Generate Search Query"
+      }
+    ],
     "views": {
       "search": [
         {
           "id": "aiSearchPrompt",
           "name": "AI Search Prompt",
-          "when": "searchViewletVisible"
+          "type": "webview"
         }
       ]
     },
-    "commands": [
+    "menus": {
+      "view/title": [
+        {
+          "command": "ai-search-prompt.openPrompt",
+          "group": "navigation",
+          "when": "view == workbench.view.search"
+        }
+      ]
+    },
+    "keybindings": [
       {
-        "command": "ai-search-prompt.submitPrompt",
-        "title": "Submit Search Prompt"
+        "command": "ai-search-prompt.quickPrompt",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a",
+        "when": "searchViewletVisible"
       }
     ],
     "configuration": {
@@ -36,12 +69,17 @@
         "aiSearchPrompt.apiKey": {
           "type": "string",
           "default": "",
-          "description": "API key for the AI service"
+          "description": "API key for the OpenAI APi compatible AI service"
         },
         "aiSearchPrompt.apiEndpoint": {
           "type": "string",
           "default": "https://api.openai.com/v1/completions",
-          "description": "Endpoint URL for the AI service"
+          "description": "Endpoint URL for the OpenAI APi compatible AI service"
+        },
+        "aiSearchPrompt.modelId": {
+          "type": "string",
+          "default": "gpt-4o",
+          "description": "model id that will be used for generating search queries"
         }
       }
     }
@@ -63,7 +101,7 @@
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
-    "@types/node": "20.x",
+    "@types/node": "^20.17.22",
     "@types/vscode": "^1.97.0",
     "@typescript-eslint/eslint-plugin": "^8.22.0",
     "@typescript-eslint/parser": "^8.22.0",
