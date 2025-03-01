@@ -34,7 +34,7 @@
     "commands": [
       {
         "command": "ai-search-prompt.openPrompt",
-        "title": "Generate Search Query"
+        "title": "Generate"
       }
     ],
     "views": {

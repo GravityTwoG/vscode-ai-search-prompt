@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { AIService } from './ai-service';
+import { getConfig } from './config';
 
 export class SearchViewDecorator {
   private disposables: vscode.Disposable[] = [];
@@ -67,7 +68,7 @@ export class SearchViewDecorator {
           cancellable: false,
         },
         async () => {
-          const aiService = new AIService();
+          const aiService = new AIService(getConfig());
           const searchConfig = await aiService.generateSearchQuery(prompt);
 
           // Apply the search configuration
